@@ -2,10 +2,11 @@ package com.myapp.controller;
 
 import com.myapp.entity.User;
 import com.myapp.service.UserService;
+import com.myapp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.myapp.DTOs.ApiResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,47 +17,90 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthService authService;
+
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<ApiResponse<?>> getAllUsers(@CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
+
+        List<User> users = userService.getAllUsers();
+        users.forEach(user -> user.setPassword(null));
+        return ResponseEntity.ok(ApiResponse.success(users));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Integer id,
+                                                      @CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
         Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            user.get().setPassword(null);
+            return ResponseEntity.ok(ApiResponse.success(user.get()));
+        }
+        return ResponseEntity.status(404).body(ApiResponse.error("User not found"));
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+    public ResponseEntity<ApiResponse<?>> getUserByEmail(@PathVariable String email,
+                                                         @CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
         Optional<User> user = userService.getUserByEmail(email);
-        return user.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            user.get().setPassword(null);
+            return ResponseEntity.ok(ApiResponse.success(user.get()));
+        }
+        return ResponseEntity.status(404).body(ApiResponse.error("User not found"));
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<ApiResponse<?>> createUser(@RequestBody User user,
+                                                     @CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
+        try {
+            User createdUser = userService.createUser(user);
+            createdUser.setPassword(null);
+            return ResponseEntity.ok(ApiResponse.success(createdUser));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User userDetails) {
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable Integer id,
+                                                     @RequestBody User userDetails,
+                                                     @CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
         try {
             User updatedUser = userService.updateUser(id, userDetails);
-            return ResponseEntity.ok(updatedUser);
+            updatedUser.setPassword(null);
+            return ResponseEntity.ok(ApiResponse.success(updatedUser));
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(ApiResponse.error(e.getMessage()));
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable Integer id,
+                                                     @CookieValue(value = "authToken", required = false) String authToken) {
+        if (!authService.isValidToken(authToken)) {
+            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
+        }
         try {
             userService.deleteUser(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(ApiResponse.success("User deleted successfully"));
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(ApiResponse.error(e.getMessage()));
         }
     }
 }
