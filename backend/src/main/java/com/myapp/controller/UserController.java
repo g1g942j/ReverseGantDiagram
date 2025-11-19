@@ -21,22 +21,14 @@ public class UserController {
     private AuthService authService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getAllUsers(@CookieValue(value = "authToken", required = false) String authToken) {
-        if (!authService.isValidToken(authToken)) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
-        }
-
+    public ResponseEntity<ApiResponse<?>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         users.forEach(user -> user.setPassword(null));
         return ResponseEntity.ok(ApiResponse.success(users));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Integer id,
-                                                      @CookieValue(value = "authToken", required = false) String authToken) {
-        if (!authService.isValidToken(authToken)) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
-        }
+    public ResponseEntity<ApiResponse<?>> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
             user.get().setPassword(null);
@@ -46,11 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ApiResponse<?>> getUserByEmail(@PathVariable String email,
-                                                         @CookieValue(value = "authToken", required = false) String authToken) {
-        if (!authService.isValidToken(authToken)) {
-            return ResponseEntity.status(401).body(ApiResponse.error("Authentication required"));
-        }
+    public ResponseEntity<ApiResponse<?>> getUserByEmail(@PathVariable String email) {
         Optional<User> user = userService.getUserByEmail(email);
         if (user.isPresent()) {
             user.get().setPassword(null);
