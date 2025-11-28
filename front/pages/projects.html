@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>GantHedgehog</title>
-        <link rel="stylesheet" href="/front/css/style.css">
-        <link rel="icon" type="image/x-icon" href="/front/favicon.ico">
-    </head>
-    <body>
-        <script src="/front/scripts/pages/projects.js"></script>
-    </body>
+<head>
+  <title>Проекты - GantHedgehog</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html">
+      <img id="brand-mark" src="../icons/favicon.ico" width="24" height="24">
+      <span class="brand-name">GantHedgehog</span>
+    </a>
+    <button id="themeToggle" class="icon-btn" type="button">
+      <img id="themeIcon" src="../icons/moon.ico" width="24" height="24">
+    </button>
+  </header>
+  <main class="projects-main">
+    <section class="card projects-card">
+      <header class="projects-header">
+        <h1 class="title">Мои проекты</h1>
+        <div class="projects-search">
+          <input id="projectSearch" class="input" type="search" placeholder="Начните вводить текст...">
+        </div>
+      </header>
+      <div id="projectsContainer" class="projects-grid"></div>
+    </section>
+  </main>
+  <script src="../scripts/pages/projects.js" defer></script>
+</body>
 </html>

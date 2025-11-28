@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>GantHedgehog</title>
-        <link rel="stylesheet" href="/front/css/style.css">
-        <link rel="icon" type="image/x-icon" href="/front/favicon.ico">
+        <title>Ошибка - GantHedgehog</title>
+        <link rel="stylesheet" href="./css/style.css">
+        <link rel="icon" type="image/x-icon" href="/front/icons/favicon.ico">
     </head>
     <body>
-        <script src="/front/scripts/router.js"></script>
+        <header class="topbar">
+            <a class="brand" href="./index.html">
+                <img id="brand-mark" src="./icons/favicon.ico" width="24" height="24">
+                <span class="brand-name">GantHedgehog</span>
+            </a>
+            <button id="themeToggle" class="icon-btn" type="button">
+                <img id="themeIcon" src="../icons/moon.ico" width="24" height="24">
+            </button>
+        </header>
+        <section class="info">
+            <h2 class="info-title">Что-то пошло не так…</h2>
+        </section>
+        <script src="./scripts/router.js" defer></script>
     </body>
 </html>

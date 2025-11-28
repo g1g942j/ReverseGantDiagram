@@ -1,3 +1,30 @@
+const root = document.documentElement;
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function applyTheme(mode) {
+  root.classList.remove("theme-light", "theme-dark");
+  if (mode === "light") root.classList.add("theme-light");
+  if (mode === "dark") root.classList.add("theme-dark");
+  
+  if (themeIcon) {
+    themeIcon.src = mode === "dark" ? "../icons/moon.ico" : "../icons/sun.ico";
+  }
+  localStorage.setItem("GantHedgehog_theme", mode);
+}
+
+function initTheme() {
+  const stored = localStorage.getItem("GantHedgehog_theme");
+  if (stored) return applyTheme(stored);
+  applyTheme("dark");
+}
+
+initTheme();
+
+themeToggle.addEventListener("click", () => {
+  applyTheme(root.classList.contains("theme-light") ? "dark" : "light");
+});
+
 class Router {
     constructor(){
         this.router = document.getElementById('router');
@@ -13,46 +40,21 @@ class Router {
     }
 
     async checkToken() {
-        /* localStorage sessionStorage или Cookie??? на выбор бекендера... */
+        /* localStorage sessionStorage или Cookie??? на выбор Ромчика... */
         const token = localStorage.getItem('authTokenGantHedgehog');
         if(token) {
             /* связь с валидатором... на финал */
             const result = true;
             if(result) {
-                await this.loadPage('projects');
+                window.location.href = './pages/projects.html';
                 return;
             }
         }
-        await this.loadPage('registration');
-        window.projectsList = [];
-    }
-    
-    async loadPage(page) {
-        try {
-            const html = await (await fetch(`/front/pages/${page}.html`)).text();
-            this.router.innerHTML = html;
-            await this.loadScript(page);
-        } catch(error) {
-            console.error(`Ошибка загрузки страницы ${page}:`, error);
-        }
-    }
+        /* window.projectsList = []; */
 
-    async loadScript(page) {
-        return new Promise(resolve => {
-            try {
-                const script = document.createElement('script');
-                script.src = `/front/scripts/pages/${page}.js`;
-                script.onload = () => {
-                    resolve();
-                };
-                document.body.appendChild(script);
-            } catch(error) {
-                console.error(`Ошибка загрузки скрипта ${page}:`, error);
-            }
-        });
+        window.location.href = './pages/auth.html';
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     window.router = new Router();

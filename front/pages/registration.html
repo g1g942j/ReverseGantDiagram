@@ -1,11 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>GantHedgehog</title>
-        <link rel="stylesheet" href="/front/css/style.css">
-        <link rel="icon" type="image/x-icon" href="/front/favicon.ico">
-    </head>
-    <body>
-        <script src="/front/scripts/pages/registration.js"></script>
-    </body>
+<head>
+  <title>Регистрация - GantHedgehog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../index.html">
+      <img id="brand-mark" src="../icons/favicon.ico" width="24" height="24">
+      <span class="brand-name">GantHedgehog</span>
+    </a>
+    <button id="themeToggle" class="icon-btn" type="button">
+      <img id="themeIcon" src="../icons/moon.ico" width="24" height="24">
+    </button>
+  </header>
+  <main class="auth">
+    <section class="card">
+      <h1 class="title">Регистрация</h1>
+      <form id="registrationForm" class="form">
+        <label class="field">
+          <span class="label">Фамилия Имя</span>
+          <input id="name" class="input" type="text" placeholder="Ввести текст..." required>
+        </label>
+        <label class="field">
+          <span class="label">Email</span>
+          <input id="email" class="input" type="email" placeholder="Ввести текст..." required>
+        </label>
+        <label class="field password-field">
+          <span class="label">Пароль</span>
+          <div class="password-wrapper">
+            <input id="password" class="input" type="password" placeholder="Начните вводить текст" required>
+            <button class="icon-btn ghost toggle-password" type="button" id="togglePassword">
+              <img src="../icons/close_eye.ico" alt="Показать пароль" width="20" height="20" aria-hidden="true">
+            </button>
+          </div>
+        </label>
+        <label class="field">
+          <span class="label">Подтвердите пароль</span>
+          <div class="password-wrapper">
+            <input id="confirmPassword" class="input" type="password" placeholder="Начните вводить текст" required>
+            <button class="icon-btn ghost toggle-password" type="button">
+              <img src="../icons/close_eye.ico" alt="Показать пароль" width="20" height="20">
+            </button>
+          </div>
+        </label>
+        <button type="submit" class="btn primary">Зарегистрироваться</button>
+        <div class="form">
+          <div style="text-align:center">ИЛИ</div>
+          <button type="button" id="loginButton" class="btn">Войти в систему</button>
+        </div>
+      </form>
+    </section>
+    <section class="info">
+      <h2 class="info-title">GantHedgehog - система для студенческих проектов</h2>
+      <p class="info-text">Создавай аккаунт и начинай работу над проектом.</p>
+      <p class="info-text"><mark>ТУТ ДОЛЖНА БЫТЬ GIFка...</mark></p>
+    </section>
+  </main>
+  <script src="../scripts/pages/registration.js" defer></script>
+</body>
 </html>
